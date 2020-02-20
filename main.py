@@ -2,9 +2,9 @@
 # file = "Test/a_example.txt"
 # file = "Test/b_read_on.txt"
 # file = "Test/c_incunabula.txt"
-file = "Test/d_tough_choices.txt"
+# file = "Test/d_tough_choices.txt"
 # file = "Test/e_so_many_books.txt"
-# file = "Test/f_libraries_of_the_world.txt"
+file = "Test/f_libraries_of_the_world.txt"
 
 f = open(file, "r")
 
@@ -32,7 +32,7 @@ already_sign_up = set()
 
 library_score_queue = [i for i in range(libraries)]
 
-library_score_queue = sorted(library_score_queue, key=lambda x: sum([book_scores[i] for i in library_books[x]]))
+library_score_queue = sorted(library_score_queue, key=lambda x: -sum([book_scores[i] for i in library_books[x]]))
 # 可以除天数
 # print(library_score_queue)
 
@@ -40,11 +40,12 @@ result = [[libraries]] + [[] for i in range(libraries * 2)]
 
 for i in range(len(library_score_queue)):
     result[(i + 1) * 2 - 1].append(library_score_queue[i])  # 图书馆编号
-    # result[(i + 1) * 2 - 1].append(len(library_books[library_score_queue[i]]))  # 书数量
-
-    tmp = library_books[library_score_queue[i]]-already_sign_up
-    result[(i + 1) * 2 - 1].append(len(tmp))
-    result[(i + 1) * 2] = list(tmp)
+    result[(i + 1) * 2 - 1].append(len(library_books[library_score_queue[i]]))  # 书数量
+    result[(i + 1) * 2] = list(library_data[library_score_queue[i]])
+    #
+    # tmp = library_books[library_score_queue[i]]-already_sign_up
+    # result[(i + 1) * 2 - 1].append(len(tmp))
+    # result[(i + 1) * 2] = list(tmp)
 
     # 去重
     already_sign_up = already_sign_up | library_books[library_score_queue[i]]
