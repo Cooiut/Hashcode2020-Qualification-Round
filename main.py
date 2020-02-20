@@ -8,33 +8,34 @@ file = "Test/a_example.txt"
 
 f = open(file, "r")
 
-amount = int(f.readline().split(" ")[0])
-denominations = tuple(int(i) for i in f.readline().rstrip().split(" "))
+books, libraries, days = tuple(int(i) for i in f.readline().rstrip().split(" "))
 
+library_data = tuple(([], []) for i in range(libraries))
+
+book_scores = tuple(int(i) for i in f.readline().rstrip().split(" "))
+
+# 扫图书馆
+for i in range(libraries):
+    for j in f.readline().rstrip().split(" "):
+        library_data[i][0].append(j)
+    for j in f.readline().rstrip().split(" "):
+        library_data[i][1].append(j)
 f.close()
 
+print(library_data)
 # 操作
 
 # min(myList, key=lambda x:abs(x-myNumber))
 
 
 # Method 1
-result = list(denominations)
-current_sum = sum(result)
-while current_sum > amount:
-    # print(result)
-    diff = current_sum - amount
-    closest = min(result, key=lambda x: abs(x - diff))
-    result.remove(closest)
-    current_sum = sum(result)
-
+result = []
 
 # 写文件
 if __name__ == '__main__':
+    output = []
 
-    output = [str(denominations.index(i)) for i in sorted(result)]
-
-    f = open(file.replace("in", "out"), "w")
+    f = open(file.replace("txt", "out"), "w")
     f.write(str(len(output)) + "\n")
     f.write(" ".join(output))
 
