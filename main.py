@@ -2,9 +2,9 @@
 # file = "Test/a_example.txt"
 # file = "Test/b_read_on.txt"
 # file = "Test/c_incunabula.txt"
-# file = "Test/d_tough_choices.txt"
+file = "Test/d_tough_choices.txt"
 # file = "Test/e_so_many_books.txt"
-file = "Test/f_libraries_of_the_world.txt"
+# file = "Test/f_libraries_of_the_world.txt"
 
 f = open(file, "r")
 
@@ -45,12 +45,14 @@ result = [[libraries]] + [[] for i in range(libraries * 2)]
 # for i in range(libraries):
 i = 0
 while i < result[0][0]:
-    tmp = library_books[library_score_queue[i]] - already_sign_up
+    library_score_queue = sorted(library_score_queue, key=lambda x: -sum([book_scores[i] for i in library_books[x] if i not in already_sign_up]) * (library_data[x][2] / library_data[x][1]))
+
+    tmp = library_books[library_score_queue[0]] - already_sign_up
     if len(tmp) == 0:
         result[0][0] = result[0][0] - 1
         result.pop()
         continue
-    result[(i + 1) * 2 - 1].append(library_score_queue[i])  # 图书馆编号
+    result[(i + 1) * 2 - 1].append(library_score_queue[0])  # 图书馆编号
     # result[(i + 1) * 2 - 1].append(len(library_books[library_score_queue[i]]))  # 书数量
     # result[(i + 1) * 2] = list(library_data[library_score_queue[i]])
     #
@@ -60,8 +62,11 @@ while i < result[0][0]:
     # 去重
     already_sign_up = already_sign_up | tmp
     # print("already_sign_up: " + str(already_sign_up))
+
     print(i)
     i += 1
+    library_score_queue.pop(0)
+
 '''    for j in range(libraries):
         if j != library_score_queue[i]:
             # for item in already_sign_up:
