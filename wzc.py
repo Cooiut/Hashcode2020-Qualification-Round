@@ -2,9 +2,9 @@
 # file = "Test/a_example.txt"
 # file = "Test/b_read_on.txt"
 # file = "Test/c_incunabula.txt"
-file = "Test/d_tough_choices.txt"
+# file = "Test/d_tough_choices.txt"
 # file = "Test/e_so_many_books.txt"
-# file = "Test/f_libraries_of_the_world.txt"
+file = "Test/f_libraries_of_the_world.txt"
 
 f = open(file, "r")
 
