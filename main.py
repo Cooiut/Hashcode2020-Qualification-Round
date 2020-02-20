@@ -1,16 +1,20 @@
 # 读文件
 # file = "Test/a_example.txt"
-# file = "Test/b_read_on.txt"
+file = "Test/b_read_on.txt"
 # file = "Test/c_incunabula.txt"
 # file = "Test/d_tough_choices.txt"
 # file = "Test/e_so_many_books.txt"
-file = "Test/f_libraries_of_the_world.txt"
+# file = "Test/f_libraries_of_the_world.txt"
 
 f = open(file, "r")
 
 books, libraries, days = tuple(int(i) for i in f.readline().rstrip().split(" "))
 
-library_data = tuple(([], []) for i in range(libraries))
+# library_data = tuple(([], set()) for i in range(libraries))
+
+library_data = ([] for i in range(libraries))
+
+library_books = {i: set() for i in range(libraries)}
 
 book_scores = tuple(int(i) for i in f.readline().rstrip().split(" "))
 
@@ -19,7 +23,7 @@ for i in range(libraries):
     for j in f.readline().rstrip().split(" "):
         library_data[i][0].append(int(j))
     for j in f.readline().rstrip().split(" "):
-        library_data[i][1].append(int(j))
+        library_data[i][1].add(int(j))
 f.close()
 
 # 操作
@@ -38,14 +42,22 @@ for i in range(len(library_score_queue)):
     result[(i + 1) * 2 - 1].append(library_score_queue[i])
     result[(i + 1) * 2 - 1].append(len(library_data[library_score_queue[i]][1]))
 
-    result[(i + 1) * 2] = library_data[library_score_queue[i]][1]
+    result[(i + 1) * 2] = list(library_data[library_score_queue[i]][1])
 
-print(result)
+    # 去重
+    already_sign_up = already_sign_up | library_data[library_score_queue[i]][1]
+    # print("already_sign_up: " + str(already_sign_up))
+    print(i)
+    for j in range(len(library_data)):
+        if j != library_score_queue[i]:
+            for item in already_sign_up:
+                # print(item)
+                library_data[j][1].discard(item)
 
 # 写文件
 if __name__ == '__main__':
-    # print(library_data)
-
+    print(library_data)
+    print(result)
     output = result
 
     f = open(file.replace("txt", "out"), "w")
