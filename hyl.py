@@ -1,10 +1,10 @@
 # 读文件
 # file = "Test/a_example.txt"
-file = "Test/b_read_on.txt"
+# file = "Test/b_read_on.txt"
 # file = "Test/c_incunabula.txt"
 # file = "Test/d_tough_choices.txt"
 # file = "Test/e_so_many_books.txt"
-# file = "Test/f_libraries_of_the_world.txt"
+file = "Test/f_libraries_of_the_world.txt"
 
 f = open(file, "r")
 
@@ -35,8 +35,11 @@ library_score_queue = [i for i in range(libraries)]
 # library_score_queue = sorted(library_score_queue, key=lambda x: -sum([book_scores[i] for i in library_books[x]]))
 # library_score_queue = sorted(library_score_queue, key=lambda x: -sum([book_scores[i] for i in library_books[x]]) *
 #                                                                 (library_data[x][2] / library_data[x][1]))
-
-
+library_score_queue = sorted(library_score_queue,
+                             key=lambda x: -(
+                                     (sum([book_scores[i] for i in library_books[x]]) / (
+                                             len(library_books[x]) * library_data[x][1])) *
+                                     library_data[x][2]) / library_data[x][1])
 # 可以除天数
 # print(library_score_queue)
 
@@ -46,8 +49,8 @@ result = [[libraries]] + [[] for i in range(libraries * 2)]
 i = 0
 while i < result[0][0]:
     library_score_queue = sorted(library_score_queue, key=lambda x: -sum(
-        [book_scores[i] for i in library_books[x] if i not in already_sign_up]) * (library_data[x][2] / (
-                library_data[x][1] ** 2)))
+        [book_scores[i] for i in library_books[x] if i not in already_sign_up]) * (library_data[x][2] / library_data[x][
+        1]))
 
     tmp = library_books[library_score_queue[0]] - already_sign_up
     if len(tmp) == 0:

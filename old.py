@@ -34,9 +34,13 @@ library_score_queue = [i for i in range(libraries)]
 
 # library_score_queue = sorted(library_score_queue, key=lambda x: -sum([book_scores[i] for i in library_books[x]]))
 library_score_queue = sorted(library_score_queue, key=lambda x: -sum([book_scores[i] for i in library_books[x]]) *
-                                                                (library_data[x][2] / library_data[x][1]))
+                                                                (library_data[x][2] / (library_data[x][1] ** 1)))
 
-
+library_score_queue = sorted(library_score_queue,
+                             key=lambda x: -(
+                                     (sum([book_scores[i] for i in library_books[x]]) / (
+                                             len(library_books[x]) * library_data[x][1])) *
+                                     library_data[x][2]) / library_data[x][1])
 # 可以除天数
 # print(library_score_queue)
 
