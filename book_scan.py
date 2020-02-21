@@ -27,36 +27,31 @@ class BookScanner:
         i = 0
         while i < self.result[0][0]:
 
-            # self.library_score_queue = sorted(self.library_score_queue,
-            #                                   key=lambda x: -sum([self.book_scores[i] for i in self.library_books[x]]) *
-            #                                                 (self.library_data[x][2] / (self.library_data[x][1] ** 2)))
-
             self.library_score_queue = sorted(self.library_score_queue,
-                                              key=lambda x: -sum([self.book_scores[k] for k in self.library_books[x]]) /
-                                                            ((self.reamining_days - self.library_data[x][1]) /
-                                                             self.library_data[x][2]))
+                                              key=lambda x: -sum([self.book_scores[i] for i in self.library_books[x]]) *
+                                                            (self.library_data[x][2] / (self.library_data[x][1] ** 2)))
+
+
+            # self.library_score_queue = sorted(self.library_score_queue,
+            #                                   key=lambda x: -sum([self.book_scores[k] for k in self.library_books[x]]) /
+            #                                                 ((self.reamining_days - self.library_data[x][1] if self.reamining_days - self.library_data[x][1] != 0 else -1) /
+            #                                                  self.library_data[x][2]))
+            print(self.library_score_queue)
 
             tmp = self.library_books[self.library_score_queue[0]] - self.already_sign_up
             if len(tmp) == 0:
                 self.result[0][0] = self.result[0][0] - 1
-                # self.result.pop()
-                # self.result.pop()
                 continue
             self.result.append([])
             self.result.append([])
             self.result[(i + 1) * 2 - 1].append(self.library_score_queue[0])  # 图书馆编号
-            # result[(i + 1) * 2 - 1].append(len(library_books[library_score_queue[i]]))  # 书数量
-            # result[(i + 1) * 2] = list(library_data[library_score_queue[i]])
-            #
             self.result[(i + 1) * 2 - 1].append(len(tmp))
-            # self.result[(i + 1) * 2] = list(tmp)
             self.result[(i + 1) * 2] = sorted(tmp, key=lambda x: -self.book_scores[x])
 
             # 去重
             self.already_sign_up = self.already_sign_up | tmp
             for j in self.already_sign_up:
                 self.book_scores[j] = 0
-            # print("already_sign_up: " + str(already_sign_up))
 
             print(self.file, i)
 
@@ -74,7 +69,7 @@ class BookScanner:
         print(self.result)
         output = self.result
 
-        f = open(self.file.replace("txt", "out1"), "w")
+        f = open(self.file.replace("Test", "Out"), "w")
         for i in output:
             f.write(" ".join([str(j) for j in i]))
             f.write("\n")
@@ -100,11 +95,15 @@ if __name__ == '__main__':
                   "Test/e_so_many_books.txt",
                   "Test/f_libraries_of_the_world.txt",
                   "Test/d_tough_choices.txt"]
+    mult = True
+    # mult = False
+    if mult:
+        from multiprocessing import Pool
 
-    from multiprocessing import Pool
-
-    pool = Pool(4)
-    for file in input_list:
-        pool.apply_async(run_it, (file,))
-    pool.close()
-    pool.join()
+        pool = Pool(4)
+        for file in input_list:
+            pool.apply_async(run_it, (file,))
+        pool.close()
+        pool.join()
+    else:
+        run_it(input_list[1])
