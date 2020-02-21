@@ -26,21 +26,23 @@ class BookScanner:
     def operate(self):
         i = 0
         while i < self.result[0][0]:
-
+            # '''
             self.library_score_queue = sorted(self.library_score_queue,
                                               key=lambda x: -sum([self.book_scores[i] for i in self.library_books[x]]) *
-                                                            (self.library_data[x][2] / (self.library_data[x][1] ** 2)))
-
+                                                            (self.library_data[x][2] /
+                                                             (self.library_data[x][1] ** 1.25)))
+            '''
+            Best fot all: 2
+            Best for e: 1.3
+            '''
             '''
             def compare(lib):
                 books_can_scan = int((self.reamining_days - self.library_data[lib][1]
-                                      if self.reamining_days - self.library_data[lib][1] != 0 else -1) /
+                                      if self.reamining_days - self.library_data[lib][1] != 0 else -1) *
                                      self.library_data[lib][2])
-                # books_can_scan += 1
-                # if books_can_scan > self.library_data[lib][0]:
-                #     books_can_scan = self.library_data[lib][0]
-                books = sorted([self.book_scores[i] for i in self.library_books[lib]],)[:books_can_scan + 1]
+                books = sorted([self.book_scores[i] for i in self.library_books[lib]], reverse=True)[:books_can_scan]
                 score = sum(books)
+                # print(books_can_scan, score)
                 return score
 
             self.library_score_queue = sorted(self.library_score_queue, key=compare, reverse=True)
@@ -116,4 +118,4 @@ if __name__ == '__main__':
         pool.close()
         pool.join()
     else:
-        run_it(input_list[0])
+        run_it(input_list[1])
