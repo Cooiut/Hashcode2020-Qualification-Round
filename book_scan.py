@@ -9,7 +9,7 @@ class BookScanner:
         self.library_data = {i: [] for i in range(self.libraries)}
         self.library_books = {i: set() for i in range(self.libraries)}
         self.book_scores = [int(i) for i in f.readline().rstrip().split(" ")]
-        self.time = 0
+        self.reamining_days = self.days + 10
 
         # 扫图书馆
         for i in range(self.libraries):
@@ -27,9 +27,14 @@ class BookScanner:
         i = 0
         while i < self.result[0][0]:
 
+            # self.library_score_queue = sorted(self.library_score_queue,
+            #                                   key=lambda x: -sum([self.book_scores[i] for i in self.library_books[x]]) *
+            #                                                 (self.library_data[x][2] / (self.library_data[x][1] ** 2)))
+
             self.library_score_queue = sorted(self.library_score_queue,
-                                              key=lambda x: -sum([self.book_scores[i] for i in self.library_books[x]]) *
-                                                            (self.library_data[x][2] / (self.library_data[x][1] ** 2)))
+                                              key=lambda x: -sum([self.book_scores[k] for k in self.library_books[x]]) /
+                                                            ((self.reamining_days - self.library_data[x][1]) /
+                                                             self.library_data[x][2]))
 
             tmp = self.library_books[self.library_score_queue[0]] - self.already_sign_up
             if len(tmp) == 0:
@@ -44,7 +49,8 @@ class BookScanner:
             # result[(i + 1) * 2] = list(library_data[library_score_queue[i]])
             #
             self.result[(i + 1) * 2 - 1].append(len(tmp))
-            self.result[(i + 1) * 2] = list(tmp)
+            # self.result[(i + 1) * 2] = list(tmp)
+            self.result[(i + 1) * 2] = sorted(tmp, key=lambda x: -self.book_scores[x])
 
             # 去重
             self.already_sign_up = self.already_sign_up | tmp
@@ -55,8 +61,8 @@ class BookScanner:
             print(self.file, i)
 
             # 判断超时
-            self.time += self.library_data[self.library_score_queue[0]][1]
-            if self.time > self.days + 5:
+            self.reamining_days -= self.library_data[self.library_score_queue[0]][1]
+            if self.reamining_days < 0:
                 self.result[0][0] = int((len(self.result) - 1) / 2)
                 break
 
@@ -68,7 +74,7 @@ class BookScanner:
         print(self.result)
         output = self.result
 
-        f = open(self.file.replace("txt", "out"), "w")
+        f = open(self.file.replace("txt", "out1"), "w")
         for i in output:
             f.write(" ".join([str(j) for j in i]))
             f.write("\n")
